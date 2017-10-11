@@ -40,12 +40,21 @@ public class FrontCompression {
         } else if (corpus.length() == 0) {
             return "";
         }
-
-        /*
-         * Complete this function.
-         */
-
-        return "";
+        String[] wordArray = corpus.split("\n");
+        String compressed = "";
+        for (int i = 0; i < wordArray.length; i++) {
+            compressed += 0 + " " + wordArray[i] + "\n";
+            for (int j = i + 1; j < wordArray.length; j++) {
+                if (longestPrefix(wordArray[i], wordArray[j]) == 0) {
+                    break;
+                } else {
+                    compressed += longestPrefix(wordArray[i], wordArray[j]) + " " + wordArray[j]
+                            .substring(longestPrefix(wordArray[i], wordArray[j])) + "\n";
+                    i++;
+                }
+            }
+        }
+        return compressed;
     }
 
     /**
@@ -63,12 +72,28 @@ public class FrontCompression {
         } else if (corpus.length() == 0) {
             return "";
         }
-
-        /*
-         * Complete this function.
-         */
-
-        return "";
+        String[] wordArray = corpus.split("\n");
+        String decompressed = "";
+        String temp = "";
+        final int zero = 48, nine = 57;
+        for (int i = 0; i < wordArray.length; i++) {
+            String number = "";
+            for (int j = 0; j < wordArray[i].length(); j++) {
+                if (wordArray[i].charAt(j) >= zero && wordArray[i].charAt(j) <= nine) {
+                    number += wordArray[i].charAt(j);
+                }
+            }
+            if (number.equals("0")) {
+                decompressed += wordArray[i].substring(number.length() + 1) + "\n";
+                temp = wordArray[i].substring(number.length() + 1);
+            } else {
+                decompressed += temp.substring(0, Integer.parseInt(number))
+                        + wordArray[i].substring(number.length() + 1) + "\n";
+                temp = temp.substring(0, Integer.parseInt(number))
+                        + wordArray[i].substring(number.length() + 1);
+            }
+        }
+        return decompressed;
     }
 
     /**
@@ -79,10 +104,14 @@ public class FrontCompression {
      * @return the length of the common prefix between the two strings
      */
     private static int longestPrefix(final String firstString, final String secondString) {
-        /*
-         * Complete this function.
-         */
-        return 0;
+        int count = 0;
+        for (int i = 0; i < firstString.length() && i < secondString.length(); i++) {
+            if (firstString.substring(i, i + 1)
+                    .equals(secondString.substring(i,  i + 1))) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /**
